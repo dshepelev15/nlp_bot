@@ -1,0 +1,7 @@
+aiogram # for telegram bots
+aio-pika # for communication with broker rabbitmq
+python-dotenv # for loading .env file
+aiocqlengine # for cassandra access
+pymorphy2 # for stemming and lemmatization
+httpx # for http calls
+aioredis # for redis

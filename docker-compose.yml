@@ -1,0 +1,61 @@
+version: '3'
+
+x-build_common: &build_common
+  env_file: .env
+  restart: always
+  depends_on:
+    - rabbitmq
+    - cassandra
+    - redis
+
+services:
+  rabbitmq:
+    image: bitnami/rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./rabbitmq_data:/bitnami/rabbitmq/mnesia
+
+  cassandra:
+    image: bitnami/cassandra
+    ports:
+        - 9042:9042
+    volumes:
+      - ./data/cassandra:/var/lib/cassandra
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - 6379:6379
+
+  # db:
+  #   image: postgres
+  #   volumes:
+  #     - ./postgres_data:/var/lib/postgresql/data
+  #   env_file:
+  #     - .env
+
+  nlp_common_preprocessing:
+    <<: *build_common
+    build:
+      context: .
+      dockerfile: ./nlp_preprocessing/Dockerfile
+
+  nlp_inference:
+    <<: *build_common
+    build:
+      context: .
+      dockerfile: ./nlp_inference/Dockerfile
+
+  notifier:
+    <<: *build_common
+    build:
+      context: .
+      dockerfile: ./notifier/Dockerfile
+
+  telegram_bot:
+    <<: *build_common
+    build:
+      context: .
+      dockerfile: ./telegram_bot/Dockerfile

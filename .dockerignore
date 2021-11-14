@@ -1,0 +1,7 @@
+*
+!requirements.txt
+!utils
+!telegram_bot
+!notifier
+!nlp_inference
+!nlp_preprocessing
